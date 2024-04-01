@@ -1,9 +1,48 @@
 import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
-    const navLinks = {
+    const navLinks = (
+      <>
+        <li>
+          <NavLink
+            to="/"
+            className={({isActive}) =>
+              isActive
+                ? "text-rose-400 font-semibold text-lg"
+                : "text-slate-300 font-normal text-lg"
+            }
+          >
+            Home
+          </NavLink>
+        </li>
         
-    }
+        <li>
+          <NavLink
+            to="/login"
+            className={({isActive}) =>
+              isActive
+                ? "text-rose-400 font-semibold text-lg"
+                : "text-slate-300 font-normal text-lg"
+            }
+          >
+            Login
+          </NavLink>
+        </li>
+
+        <li>
+          <NavLink
+            to="/register"
+            className={({isActive}) =>
+              isActive
+                ? "text-rose-400 font-semibold text-lg"
+                : "text-slate-300 font-normal text-lg"
+            }
+          >
+            Register
+          </NavLink>
+        </li>
+      </>
+    );
   return (
     <div className="bg-base-100">
       <div className="navbar w-full max-w-[1170px] mx-auto">
@@ -28,13 +67,15 @@ const Navbar = () => {
             <ul
               tabIndex={0}
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
-            ></ul>
+            >
+                {navLinks}
+            </ul>
           </div>
-          <a className="btn btn-ghost text-xl">daisyUI</a>
+          <a href="/" className="text-2xl md:text-3xl text-rose-400 font-bold">SimpleAuth</a>
         </div>
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">
-            
+          <ul className="flex gap-8 items-center px-1">
+            {navLinks}
           </ul>
         </div>
         <div className="navbar-end">
