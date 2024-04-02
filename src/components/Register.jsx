@@ -1,6 +1,13 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../authProvider/AuthProvider";
+
 
 const Register = () => {
+
+  const { createUser } = useContext(AuthContext);
+
+
 
 
     const handleRegister = e => {
@@ -9,12 +16,20 @@ const Register = () => {
             const name = e.target.name.value;
             const email = e.target.email.value;
             const password = e.target.password.value;
-            const profile = e.target.profile.value;
             e.target.email.value = '';
             e.target.password.value = "";
 
-        console.log(name, email, password, profile)
+        console.log(name, email, password);
+
+
+        // create new user
+      createUser(email, password)
+      .then(result => console.log(result.user))
+      .catch(error => console.log(error.message))
+
+      
     }
+
 
   return (
     <div className="flex justify-center items-center">
@@ -63,24 +78,28 @@ const Register = () => {
                   required
                 />
               </div>
-              <div className="form-control">
+              {/* <div className="form-control">
                 <label className="label">
                   <span className="label-text">Profile Image</span>
                 </label>
                 <input
                   type="file"
                   className="file-input w-full input-bordered"
-                  name="profile"
+                  name="profileImage"
                 />
-              </div>
+              </div> */}
               <div className="form-control mt-6">
                 <button className="py-3 px-8 bg-rose-400 font-semibold rounded-3xl">
                   Register
                 </button>
               </div>
-            <p className="mt-5 text-lg text-gray-500 font-medium">Already Have an Account Please <Link to='/login' className="text-rose-400 font-bold">Login</Link> </p>
+              <p className="mt-5 text-lg text-gray-500 font-medium">
+                Already Have an Account Please{" "}
+                <Link to="/login" className="text-rose-400 font-bold">
+                  Login
+                </Link>{" "}
+              </p>
             </form>
-
           </div>
         </div>
       </div>

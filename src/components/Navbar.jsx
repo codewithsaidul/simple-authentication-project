@@ -1,6 +1,9 @@
-import { NavLink } from "react-router-dom";
+import { useContext } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { AuthContext } from "../authProvider/AuthProvider";
 
 const Navbar = () => {
+  const {user, logOut} = useContext(AuthContext)
     const navLinks = (
       <>
         <li>
@@ -41,8 +44,28 @@ const Navbar = () => {
             Register
           </NavLink>
         </li>
+
+        <li>
+          <NavLink
+            to="/order"
+            className={({isActive}) =>
+              isActive
+                ? "text-rose-400 font-semibold text-lg"
+                : "text-slate-300 font-normal text-lg"
+            }
+          >
+            Order
+          </NavLink>
+        </li>
       </>
     );
+
+
+       const handleSignOut = () => {
+         logOut()
+           .then(() => console.log("done"))
+           .catch((error) => console.log(error.message));
+       };
   return (
     <div className="bg-base-100 shadow-lg">
       <div className="navbar w-full max-w-[1170px] mx-auto">
@@ -68,18 +91,32 @@ const Navbar = () => {
               tabIndex={0}
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
             >
-                {navLinks}
+              {navLinks}
             </ul>
           </div>
-          <a href="/" className="text-2xl md:text-3xl text-rose-400 font-bold">SimpleAuth</a>
+          <a href="/" className="text-2xl md:text-3xl text-rose-400 font-bold">
+            SimpleAuth
+          </a>
         </div>
         <div className="navbar-center hidden lg:flex">
-          <ul className="flex gap-8 items-center px-1">
-            {navLinks}
-          </ul>
+          <ul className="flex gap-8 items-center px-1">{navLinks}</ul>
         </div>
         <div className="navbar-end">
-          <a className="btn">Button</a>
+          {user ? (
+            <>
+              <p>{user.email}</p>
+              <button
+                onClick={handleSignOut}
+                className="py-3 px-6 ml-3 bg-rose-400 rounded-lg text-white font-medium"
+              >
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <Link to='/login' className="py-3 px-6 ml-3 bg-rose-400 rounded-lg text-white font-medium">
+              Login
+            </Link>
+          )}
         </div>
       </div>
     </div>
