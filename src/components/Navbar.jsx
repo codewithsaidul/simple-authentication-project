@@ -9,7 +9,7 @@ const Navbar = () => {
         <li>
           <NavLink
             to="/"
-            className={({isActive}) =>
+            className={({ isActive }) =>
               isActive
                 ? "text-rose-400 font-semibold text-lg"
                 : "text-slate-300 font-normal text-lg"
@@ -18,11 +18,11 @@ const Navbar = () => {
             Home
           </NavLink>
         </li>
-        
+
         <li>
           <NavLink
             to="/login"
-            className={({isActive}) =>
+            className={({ isActive }) =>
               isActive
                 ? "text-rose-400 font-semibold text-lg"
                 : "text-slate-300 font-normal text-lg"
@@ -35,7 +35,7 @@ const Navbar = () => {
         <li>
           <NavLink
             to="/register"
-            className={({isActive}) =>
+            className={({ isActive }) =>
               isActive
                 ? "text-rose-400 font-semibold text-lg"
                 : "text-slate-300 font-normal text-lg"
@@ -48,7 +48,7 @@ const Navbar = () => {
         <li>
           <NavLink
             to="/order"
-            className={({isActive}) =>
+            className={({ isActive }) =>
               isActive
                 ? "text-rose-400 font-semibold text-lg"
                 : "text-slate-300 font-normal text-lg"
@@ -57,6 +57,36 @@ const Navbar = () => {
             Order
           </NavLink>
         </li>
+
+        {user && (
+          <>
+            <li>
+              <NavLink
+                to="/profile"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-rose-400 font-semibold text-lg"
+                    : "text-slate-300 font-normal text-lg"
+                }
+              >
+                Profile
+              </NavLink>
+            </li>
+
+            <li>
+              <NavLink
+                to="/dashboard"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-rose-400 font-semibold text-lg"
+                    : "text-slate-300 font-normal text-lg"
+                }
+              >
+                Dashboard
+              </NavLink>
+            </li>
+          </>
+        )}
       </>
     );
 

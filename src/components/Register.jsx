@@ -1,34 +1,70 @@
-import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../authProvider/AuthProvider";
+import toast from "react-hot-toast";
+import storage from "../firebase/firebase.config";
 
 
 const Register = () => {
 
   const { createUser } = useContext(AuthContext);
 
+  const [registerError, setRegisterError] = useState();
+  const [profileImage, setProfileImage] = useState(null);
 
+  const naviGate =  useNavigate();
 
 
     const handleRegister = e => {
         e.preventDefault();
 
-            const name = e.target.name.value;
+            // const name = e.target.name.value;
             const email = e.target.email.value;
             const password = e.target.password.value;
-            e.target.email.value = '';
-            e.target.password.value = "";
 
-        console.log(name, email, password);
+
+
+      if (password.length < 6) {
+      setRegisterError('Password Should Be At Least 6 Character or Above');
+      return;
+    } else if (!/[A-Z]/.test(password)) {
+      setRegisterError(
+        "Your Password Should Have At Least One Uppercase Character!"
+      ); 
+      return;
+    }
 
 
         // create new user
       createUser(email, password)
-      .then(result => console.log(result.user))
-      .catch(error => console.log(error.message))
+      .then((userCredential) => {
+      if (profileImage) {
+        const storageRef = storage.ref();
+        const imageRef = storageRef.child(`profile_images/${userCredential.user.uid}`);
+        return imageRef.put(profileImage)
+          .then(() => imageRef.getDownloadURL())
+          .then((imageURL) => {
+            return userCredential.user.updateProfile({
+              photoURL: imageURL
+            });
+          });
+      }
+    })
+    .then(() => {
+        toast.success("Account Created Successfully!");
+        naviGate ('/login')
+        e.target.reset();
+    })
+      .catch(() => setRegisterError("E-Mail Already In Used"))
 
-      
     }
+
+
+
+     const handleImageChange = (e) => {
+       const file = e.target.files[0];
+       setProfileImage(file);
+     };
 
 
   return (
@@ -38,9 +74,12 @@ const Register = () => {
           <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <form onSubmit={handleRegister} className="card-body">
               <div>
-                <h2 className="text-center text-3xl text-rose-500 font-bold mb-7">
+                <h2 className="text-center text-3xl text-rose-300 font-bold mb-7">
                   Register Now
                 </h2>
+                <p className="text-center text-base text-red-500 font-extrabold mb-7">
+                  {registerError}
+                </p>
               </div>
               <div className="form-control">
                 <label className="label">
@@ -78,7 +117,7 @@ const Register = () => {
                   required
                 />
               </div>
-              {/* <div className="form-control">
+              <div className="form-control">
                 <label className="label">
                   <span className="label-text">Profile Image</span>
                 </label>
@@ -86,8 +125,9 @@ const Register = () => {
                   type="file"
                   className="file-input w-full input-bordered"
                   name="profileImage"
+                  onChange={handleImageChange}
                 />
-              </div> */}
+              </div>
               <div className="form-control mt-6">
                 <button className="py-3 px-8 bg-rose-400 font-semibold rounded-3xl">
                   Register
